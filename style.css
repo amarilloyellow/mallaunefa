@@ -32,11 +32,11 @@ h1 {
 
 /* Estilos para el contador de UC */
 .uc-counter {
-    position: absolute;
+    position: fixed;
     top: 20px;
     right: 20px;
-    background-color: #28a745; /* Verde para el contador */
-    color: white;
+    background-color: #105420b5; /* Verde para el contador */
+    color: rgb(0, 0, 0);
     padding: 10px 15px;
     border-radius: 8px;
     font-weight: bold;
