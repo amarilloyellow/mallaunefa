@@ -119,3 +119,41 @@ h1 {
 .subject-card.locked .code {
     color: #721c24;
 }
+/* Estilos para el recuadro fijo */
+.fixed-box {
+    position: fixed; /* Hace que el recuadro se mantenga en la pantalla al hacer scroll */
+    bottom: 20px;    /* 20px desde la parte inferior */
+    right: 20px;     /* 20px desde la parte derecha */
+    background-color: #333; /* Color de fondo oscuro */
+    color: #fff;            /* Color del texto blanco */
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
+    text-align: center;
+    font-size: 0.9em;
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+    max-width: 200px; /* Limita el ancho del recuadro */
+}
+
+.fixed-box p {
+    margin: 0 0 10px 0; /* Espaciado interno para el texto */
+    font-weight: bold;
+}
+
+/* Estilos para los enlaces de redes sociales */
+.social-links {
+    margin-top: 10px;
+    display: flex; /* Para alinear los iconos horizontalmente */
+    justify-content: center; /* Centra los iconos */
+    gap: 15px; /* Espacio entre los iconos */
+}
+
+.social-links a {
+    color: #fff; /* Color de los iconos */
+    font-size: 1.5em; /* Tamaño de los iconos */
+    transition: color 0.3s ease; /* Transición suave al pasar el mouse */
+}
+
+.social-links a:hover {
+    color: #007bff; /* Cambia de color al pasar el mouse (ej. azul) */
+}
