@@ -1,27 +1,59 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Referencias a elementos del DOM ---
     const jsonUpload = document.getElementById('jsonUpload');
     const curriculumGrid = document.getElementById('curriculumGrid');
-    const totalUcSpan = document.getElementById('totalUc'); // Nuevo: Span para mostrar las UC totales
+    const totalUcSpan = document.getElementById('totalUc');
+    const careerModal = document.getElementById('careerModal'); // <- Nuevo: Referencia al popup
 
     let courseData = [];
     let completedCourses = new Set();
 
-    // Función para actualizar el contador de UC
+    // --- Función para cargar y renderizar una malla curricular ---
+    function loadCurriculum(fileName) {
+        fetch(`data/${fileName}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`No se pudo cargar el archivo ${fileName}.`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                courseData = data;
+                completedCourses = new Set(); // Reiniciar materias completadas
+                renderCurriculum();
+                careerModal.style.display = 'none'; // Ocultar el popup después de cargar
+            })
+            .catch(error => {
+                alert('Error al cargar la malla curricular.');
+                console.error(error);
+            });
+    }
+
+    // --- Lógica del Popup de Selección de Carrera ---
+    careerModal.addEventListener('click', (event) => {
+        // Comprobar si se hizo clic en un botón con el atributo 'data-file'
+        const targetButton = event.target.closest('button[data-file]');
+        if (targetButton) {
+            const fileName = targetButton.dataset.file;
+            loadCurriculum(fileName);
+        }
+    });
+
+    // Función para actualizar el contador de UC (sin cambios)
     function updateUcCounter() {
         let totalUc = 0;
         completedCourses.forEach(courseCode => {
             const course = courseData.find(c => c.cod === courseCode);
             if (course && course.uc) {
-                totalUc += parseInt(course.uc); // Sumar las unidades de crédito
+                totalUc += parseInt(course.uc);
             }
         });
-        totalUcSpan.textContent = totalUc; // Actualizar el texto del contador
+        totalUcSpan.textContent = totalUc;
     }
 
-    // Función para renderizar la malla curricular
+    // Función para renderizar la malla curricular (sin cambios)
     function renderCurriculum() {
         curriculumGrid.innerHTML = '';
-
         const semesters = courseData.reduce((acc, course) => {
             const sem = course.sem.toString();
             if (!acc[sem]) {
@@ -36,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
         sortedSemesters.forEach(semNum => {
             const semesterBlock = document.createElement('div');
             semesterBlock.classList.add('semester-block');
-
             const semesterTitle = document.createElement('h2');
             semesterTitle.classList.add('semester-title');
             semesterTitle.textContent = `Semestre ${semNum}`;
@@ -49,36 +80,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 subjectCard.innerHTML = `
                     <div class="name">${course.asig}</div>
                     <div class="code">${course.cod}</div>`;
-
                 if (completedCourses.has(course.cod)) {
                     subjectCard.classList.add('completed');
                 } else if (!canUnlockCourse(course.cod)) {
                     subjectCard.classList.add('locked');
                 }
-
                 subjectCard.addEventListener('click', () => toggleCourseCompletion(course.cod));
                 semesterBlock.appendChild(subjectCard);
             });
             curriculumGrid.appendChild(semesterBlock);
         });
 
-        updateUcCounter(); // Actualizar el contador cada vez que se renderiza la malla
+        updateUcCounter();
     }
 
+    // Función para verificar si una materia se puede desbloquear (sin cambios)
     function canUnlockCourse(courseCode) {
         const course = courseData.find(c => c.cod === courseCode);
         if (!course) return false;
-
         if (!course.requisitos || course.requisitos.length === 0) {
             return true;
         }
-
         return course.requisitos.every(req => completedCourses.has(req));
     }
 
+    // Función para marcar/desmarcar una materia (sin cambios)
     function toggleCourseCompletion(courseCode) {
         const courseElement = document.querySelector(`.subject-card[data-cod="${courseCode}"]`);
-
         if (!courseElement) return;
 
         if (completedCourses.has(courseCode)) {
@@ -91,9 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
         }
-        renderCurriculum(); // Llama a renderCurriculum para actualizar la UI y el contador
+        renderCurriculum();
     }
-
+    
+    // Listener para subir un archivo JSON (sin cambios)
     jsonUpload.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -103,8 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     courseData = JSON.parse(e.target.result);
                     completedCourses = new Set();
                     renderCurriculum();
+                    careerModal.style.display = 'none'; // Ocultar popup si se sube archivo
                 } catch (error) {
-                    alert('Error al parsear el archivo JSON. Asegúrate de que el formato sea correcto.');
+                    alert('Error al parsear el archivo JSON.');
                     console.error('Error parsing JSON:', error);
                 }
             };
@@ -112,17 +142,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Opcional: Cargar un archivo JSON de ejemplo al inicio si existe
-    fetch('data/plan_de_estudio.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('No se pudo cargar el archivo de ejemplo JSON.');
-            }
-            return response.json();
-        })
-        .then(data => {
-            courseData = data;
-            renderCurriculum();
-        })
-        .catch(error => console.warn(error.message));
 });

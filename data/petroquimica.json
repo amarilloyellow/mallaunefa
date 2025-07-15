@@ -1,0 +1,486 @@
+[
+  {
+    "sem": "1",
+    "cod": "ADG-25132",
+    "asig": "EDUCACIÓN AMBIENTAL",
+    "uc": "2",
+    "requisitos": []
+  },
+  {
+    "sem": "1",
+    "cod": "ADG-25123",
+    "asig": "HOMBRE, SOCIEDAD, CIENCIA Y TECNOLOGÍA",
+    "uc": "2",
+    "requisitos": []
+  },
+  {
+    "sem": "1",
+    "cod": "IDM-24113",
+    "asig": "INGLES I",
+    "uc": "4",
+    "requisitos": []
+  },
+  {
+    "sem": "1",
+    "cod": "MAT-21212",
+    "asig": "DIBUJO",
+    "uc": "5",
+    "requisitos": []
+  },
+  {
+    "sem": "1",
+    "cod": "MAT-21215",
+    "asig": "MATEMATICA I",
+    "uc": "4",
+    "requisitos": []
+  },
+  {
+    "sem": "1",
+    "cod": "MAT-21524",
+    "asig": "GEOMETRIA ANALÍTICA",
+    "uc": "3",
+    "requisitos": []
+  },
+  {
+    "sem": "1",
+    "cod": "ADG-25131",
+    "asig": "SEMINARIO I",
+    "uc": "",
+    "requisitos": []
+  },
+  {
+    "sem": "1",
+    "cod": "DIN-21113",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN",
+    "uc": "",
+    "requisitos": []
+  },
+  {
+    "sem": "2",
+    "cod": "IDM-24123",
+    "asig": "INGLES II",
+    "uc": "",
+    "requisitos": [
+      "IDM-24113"
+    ]
+  },
+  {
+    "sem": "2",
+    "cod": "QUF-22014",
+    "asig": "QUÍMICA GENERAL",
+    "uc": "",
+    "requisitos": [
+    ]
+  },
+  {
+    "sem": "2",
+    "cod": "QUF-23015",
+    "asig": "FISICA I",
+    "uc": "5",
+    "requisitos": [
+      "MAT-21215",
+      "MAT-21524"
+    ]
+  },
+  {
+    "sem": "2",
+    "cod": "MAT-21225",
+    "asig": "MATEMATICA II",
+    "uc": "5",
+    "requisitos": [
+      "MAT-21215",
+      "MAT-21524"
+    ]
+  },
+  {
+    "sem": "2",
+    "cod": "MAT-21114",
+    "asig": "ALGEBRA LINEAL",
+    "uc": "4",
+    "requisitos": [
+      "MAT-21215",
+      "MAT-21524"
+    ]
+  },
+  {
+    "sem": "2",
+    "cod": "ADG-25141",
+    "asig": "SEMINARIO II",
+    "uc": "",
+    "requisitos": [
+      "ADG-25131"
+    ]
+  },
+  {
+    "sem": "2",
+    "cod": "DIN-21123",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN II",
+    "uc": "3",
+    "requisitos": [
+      "DIN-21113"
+    ]
+  },
+  {
+    "sem": "3",
+    "cod": "QUF-23025",
+    "asig": "FISICA",
+    "uc": "5",
+    "requisitos": [
+      "QUF-23015",
+      "MAT-21225"
+    ]
+  },
+  {
+    "sem": "3",
+    "cod": "MAT-21235",
+    "asig": "MATEMÁTICA III",
+    "uc": "5",
+    "requisitos": [
+      "MAT-21225"
+    ]
+  },
+  {
+    "sem": "3",
+    "cod": "MAT-21414",
+    "asig": "PROBABILIDADES Y ESTADÍSTICA",
+    "uc": "",
+    "requisitos": [
+      "MAT-21225"
+    ]
+  },
+  {
+    "sem": "3",
+    "cod": "5YC-22113",
+    "asig": "PROGRAMACIÓN",
+    "uc": "",
+    "requisitos": [
+      "MAT-21114"
+    ]
+  },
+  {
+    "sem": "3",
+    "cod": "QUF-21134",
+    "asig": "EQUILIBRIO QUÍMICO",
+    "uc": "4",
+    "requisitos": [
+      "QUF-22014"
+    ]
+  },
+  {
+    "sem": "3",
+    "cod": "DIN-21133",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN III",
+    "uc": "",
+    "requisitos": [
+      "DIN-21123"
+    ]
+  },
+  {
+    "sem": "4",
+    "cod": "QUF-31114",
+    "asig": "QUÍMICA ORGÁNICA I",
+    "uc": "4",
+    "requisitos": [
+      "QUF-21134"
+    ]
+  },
+  {
+    "sem": "4",
+    "cod": "QUF-31313",
+    "asig": "CINETICA QUÍMICA",
+    "uc": "3",
+    "requisitos": [
+      "QUF-21134"
+    ]
+  },
+  {
+    "sem": "4",
+    "cod": "OPE-31114",
+    "asig": "BALANCE DE PROCESOS QUÍMICOS",
+    "uc": "4",
+    "requisitos": [
+      "QUF-21134"
+    ]
+  },
+  {
+    "sem": "4",
+    "cod": "OPE-32114",
+    "asig": "TERMODINAMICA I",
+    "uc": "4",
+    "requisitos": [
+      "QUF-21134"
+    ]
+  },
+  {
+    "sem": "4",
+    "cod": "MAT-34143",
+    "asig": "ANÁLISIS NUMÉRICO",
+    "uc": "3",
+    "requisitos": [
+      "MAT-21235"
+    ]
+  },
+  {
+    "sem": "4",
+    "cod": "IDM-34313",
+    "asig": "INGLES APLICADO A LA PETROQUIMICA",
+    "uc": "3",
+    "requisitos": [
+      "IDM-24123"
+    ]
+  },
+  {
+    "sem": "4",
+    "cod": "DIN-31143",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN IV",
+    "uc": "3",
+    "requisitos": [
+      "DIN-21133"
+    ]
+  },
+  {
+    "sem": "5",
+    "cod": "QUF-31124",
+    "asig": "QUÍMICA ORGÁNICA II",
+    "uc": "4",
+    "requisitos": [
+      "QUF-31114"
+    ]
+  },
+  {
+    "sem": "5",
+    "cod": "QUF-31234",
+    "asig": "FISICOQUÍMICA DE SUPERFICIES E HIDROCARBUROS",
+    "uc": "4",
+    "requisitos": [
+      "QUF-31313",
+      "QUF-31114"
+    ]
+  },
+  {
+    "sem": "5",
+    "cod": "OPE-32264",
+    "asig": "INGENIERÍA DE LAS REACCIONES",
+    "uc": "4",
+    "requisitos": [
+      "QUF-31313",
+      "OPE-31114"
+    ]
+  },
+  {
+    "sem": "5",
+    "cod": "OPE-32123",
+    "asig": "TERMODINAMICA II",
+    "uc": "3",
+    "requisitos": [
+      "OPE-32114"
+    ]
+  },
+  {
+    "sem": "5",
+    "cod": "OPE-31124",
+    "asig": "FENOMENOS DE TRANSPORTE",
+    "uc": "4",
+    "requisitos": [
+      "OPE-31114",
+      "MAT-34143"
+    ]
+  },
+  {
+    "sem": "5",
+    "cod": "OPE-31133",
+    "asig": "INSTRUMENTACIÓN Y CONTROL",
+    "uc": "",
+    "requisitos": [
+      "MAT-34143"
+    ]
+  },
+  {
+    "sem": "5",
+    "cod": "ADG-10820",
+    "asig": "CATEDRA BOLIVARIANA I",
+    "uc": "",
+    "requisitos": []
+  },
+  {
+    "sem": "5",
+    "cod": "DIN-31153",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN V",
+    "uc": "3",
+    "requisitos": [
+      "DIN-31143"
+    ]
+  },
+  {
+    "sem": "6",
+    "cod": "ADG-31113",
+    "asig": "INGENIERÍA DEL AMBIENTE",
+    "uc": "3",
+    "requisitos": [
+      "QUF-31114"
+    ]
+  },
+  {
+    "sem": "6",
+    "cod": "OPE-31144",
+    "asig": "PROCESOS PETROQUÍMICOS I",
+    "uc": "4",
+    "requisitos": [
+      "QUF-31124"
+    ]
+  },
+  {
+    "sem": "6",
+    "cod": "OPE-31153",
+    "asig": "INGENIERÍA DEL GAS",
+    "uc": "3",
+    "requisitos": [
+      "QUF-31124"
+    ]
+  },
+  {
+    "sem": "6",
+    "cod": "OPE-31163",
+    "asig": "PRODUCCIÓN DE HIDROCARBUROS",
+    "uc": "3",
+    "requisitos": [
+      "QUF-31234"
+    ]
+  },
+  {
+    "sem": "6",
+    "cod": "OPE-31174",
+    "asig": "OPERACIONES UNITARIAS I",
+    "uc": "4",
+    "requisitos": [
+      "OPE-31124"
+    ]
+  },
+  {
+    "sem": "6",
+    "cod": "OPE-31224",
+    "asig": "EQUIPOS BÁSICOS DE PROCESOS",
+    "uc": "4",
+    "requisitos": [
+      "OPE-31124"
+    ]
+  },
+  {
+    "sem": "6",
+    "cod": "ADG-10821",
+    "asig": "CATEDRA BOLIVARIANA II",
+    "uc": "",
+    "requisitos": []
+  },
+  {
+    "sem": "6",
+    "cod": "DIN-31163",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN VI",
+    "uc": "3",
+    "requisitos": [
+      "DIN-31153"
+    ]
+  },
+  {
+    "sem": "7",
+    "cod": "OPE-31194",
+    "asig": "PROCESOS PETROQUÍMICOS II",
+    "uc": "4",
+    "requisitos": [
+      "OPE-31144"
+    ]
+  },
+  {
+    "sem": "7",
+    "cod": "ADG-30214",
+    "asig": "METODOLOGÍA DE LA INVESTIGACIÓN",
+    "uc": "4",
+    "requisitos": []
+  },
+  {
+    "sem": "7",
+    "cod": "OPE-31214",
+    "asig": "REFINACIÓN",
+    "uc": "4",
+    "requisitos": [
+      "OPE-31144"
+    ]
+  },
+  {
+    "sem": "7",
+    "cod": "OPE-31184",
+    "asig": "OPERACIONES UNITARIAS II",
+    "uc": "4",
+    "requisitos": [
+      "OPE-31174"
+    ]
+  },
+  {
+    "sem": "7",
+    "cod": "ECO-35223",
+    "asig": "ECONOMÍA PARA INGENIEROS",
+    "uc": "3",
+    "requisitos": []
+  },
+  {
+    "sem": "7",
+    "cod": "DIN-31173",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN VII",
+    "uc": "2",
+    "requisitos": [
+      "DIN-31163"
+    ]
+  },
+  {
+    "sem": "8",
+    "cod": "AGP-30223",
+    "asig": "SEGURIDAD, HIGIENE Y AMBIENTE",
+    "uc": "3",
+    "requisitos": [
+      "ADG-31113"
+    ]
+  },
+  {
+    "sem": "8",
+    "cod": "OPE-31234",
+    "asig": "SIMULACIÓN DE PROCESOS",
+    "uc": "4",
+    "requisitos": [
+      "OPE-31194"
+    ]
+  },
+  {
+    "sem": "8",
+    "cod": "QUF-33134",
+    "asig": "DISEÑO DE EQUIPOS Y PLANTAS",
+    "uc": "4",
+    "requisitos": [
+      "OPE-31194"
+    ]
+  },
+  {
+    "sem": "8",
+    "cod": "AGG-34223",
+    "asig": "GERENCIA DE PROYECTOS",
+    "uc": "3",
+    "requisitos": [
+      "ECO-35223"
+    ]
+  },
+  {
+    "sem": "8",
+    "cod": "CIU-37314",
+    "asig": "MARCO LEGAL EJERCICIO PROFESIONAL DE LA INGENIERÍA",
+    "uc": "4",
+    "requisitos": []
+  },
+  {
+    "sem": "8",
+    "cod": "DIN-31183",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN VIII",
+    "uc": "3",
+    "requisitos": [
+      "DIN-31173"
+    ]
+  }
+]

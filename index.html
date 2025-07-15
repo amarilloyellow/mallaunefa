@@ -6,15 +6,70 @@
     <title>Malla Curricular Interactiva</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos para el Popup (Modal) */
+        .modal-overlay {
+            position: fixed; /* Se queda fijo en la pantalla */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Se asegura que esté por encima de todo */
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+        }
+
+        /* Contenedor para los botones */
+        .modal-buttons {
+            display: flex;
+            flex-direction: column; /* Apila los botones verticalmente */
+            gap: 10px; /* Espacio entre los botones */
+        }
+
+        .modal-buttons button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s; /* Pequeña transición */
+        }
+
+        .modal-buttons button:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
 </head>
 <body>
-    <input type="checkbox" id="popup-toggle" checked>
-
-    <div class="popup-overlay">
-        <div class="popup-content">
-            <label for="popup-toggle" class="close-btn" title="Cerrar">&times;</label>
-            <h2>Malla Curricular Interactiva UNEFA</h2>
-            <p>Para usarla selecciona las materias que has aprobado, al finalizar se mostrarán las materias preladas en rojo.</p>
+    <div id="careerModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Selecciona tu Carrera</h2>
+            <p>Elige la malla curricular que deseas visualizar.</p>
+            <div class="modal-buttons">
+                <button data-file="civil.json">Ingeniería Civil</button>
+                <button data-file="petroquimica.json">Ingeniería Petroquímica</button>
+                <button data-file="petroleo.json">Ingeniería de Petróleo</button>
+                <button data-file="desastres.json">Administración de Desastres</button>
+            </div>
         </div>
     </div>
     <header>
