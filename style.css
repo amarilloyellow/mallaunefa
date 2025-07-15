@@ -106,6 +106,7 @@ h1 {
 
 /* Estilos para el contador de UC */
 .uc-counter {
+    z-index: 1;
     position: fixed;
     top: 20px;
     right: 20px;
