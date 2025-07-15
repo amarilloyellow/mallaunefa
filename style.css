@@ -5,6 +5,124 @@ body {
     background-color: #f4f4f4;
     color: #333;
 }
+/* --- Estilos para el Popup (Modal) --- */
+
+/* Oculta el checkbox pero lo usamos para controlar el popup */
+.popup-toggle {
+    display: none;
+}
+
+/* El fondo oscuro que cubre la pantalla */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente oscuro */
+    z-index: 9998; /* Un valor alto para que esté por encima de todo excepto el popup */
+    opacity: 0; /* Inicialmente invisible */
+    visibility: hidden; /* Inicialmente no interactuable */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* El recuadro del popup */
+.popup-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8); /* Centrado y escala pequeña inicial */
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 90%; /* Ocupa el 90% del ancho en pantallas pequeñas */
+    max-width: 500px; /* Ancho máximo para pantallas grandes */
+    z-index: 9999; /* Por encima del overlay */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+/* Título del popup */
+.popup-box h2 {
+    color: #0056b3;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+}
+
+/* Descripción del popup */
+.popup-box p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}
+
+/* Botón de cerrar (la 'x') */
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2em;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.popup-close:hover {
+    color: #333;
+}
+
+/* --- Lógica para mostrar el popup con CSS solamente --- */
+/* Cuando el checkbox esté marcado, mostramos el overlay y el popup */
+.popup-toggle:checked + .popup-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.popup-toggle:checked + .popup-overlay + .popup-box {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1); /* Vuelve a escala normal */
+}
+
+/* Media Queries para Responsividad (opcional, pero mejora el look) */
+@media (max-width: 768px) {
+    .popup-box {
+        padding: 20px;
+        width: 95%; /* Un poco más ancho en pantallas medianas */
+    }
+    .popup-box h2 {
+        font-size: 1.5em;
+    }
+    .popup-box p {
+        font-size: 1em;
+    }
+    .popup-close {
+        font-size: 1.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .popup-box {
+        padding: 15px;
+        border-radius: 8px;
+    }
+    .popup-box h2 {
+        font-size: 1.3em;
+    }
+    .popup-box p {
+        font-size: 0.9em;
+    }
+    .popup-close {
+        font-size: 1.5em;
+        top: 8px;
+        right: 12px;
+    }
+}
 
 header {
     text-align: center;
