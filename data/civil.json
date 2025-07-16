@@ -220,6 +220,7 @@
     "cod": "MEC-31814",
     "asig": "RESISTENCIA DE MATERIALES",
     "uc": "3",
+    "hell": "yes",
     "requisitos": [
       "MAT-20714"
     ]

@@ -1,0 +1,520 @@
+[
+  {
+    "sem": "1",
+    "cod": "ADG-25132",
+    "asig": "EDUCACIÓN AMBIENTAL",
+    "uc": "2",
+    "requisitos": []
+  },
+  {
+    "sem": "1",
+    "cod": "ADG-25123",
+    "asig": "HOMBRE, SOCIEDAD, CIENCIA Y TECNOLOGÍA",
+    "uc": "3",
+    "requisitos": []
+  },
+  {
+    "sem": "1",
+    "cod": "IDM-24113",
+    "asig": "INGLES",
+    "uc": null,
+    "requisitos": []
+  },
+  {
+    "sem": "1",
+    "cod": "MAT-21212",
+    "asig": "DIBUJO",
+    "uc": "2",
+    "requisitos": []
+  },
+  {
+    "sem": "1",
+    "cod": "MAT-21215",
+    "asig": "MATEMÁTICA I",
+    "uc": "5",
+    "requisitos": [
+    ]
+  },
+  {
+    "sem": "1",
+    "cod": "MAT-21524",
+    "asig": "GEOMETRIA ANALITICA",
+    "uc": "4",
+    "requisitos": [
+    ]
+  },
+  {
+    "sem": "1",
+    "cod": "ADG-25131",
+    "asig": "SEMINARIO",
+    "uc": "1",
+    "requisitos": []
+  },
+  {
+    "sem": "1",
+    "cod": "DIN-21113",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN)",
+    "uc": null,
+    "requisitos": []
+  },
+  {
+    "sem": "2",
+    "cod": "IDM-24123",
+    "asig": "INGLES II",
+    "uc": "3",
+    "requisitos": [
+      "IDM-24113"
+    ]
+  },
+  {
+    "sem": "2",
+    "cod": "QUF-22014",
+    "asig": "QUIMICA GENERAL",
+    "uc": "4",
+    "requisitos": []
+  },
+  {
+    "sem": "2",
+    "cod": "QUF-23015",
+    "asig": "FISICA I",
+    "uc": "5",
+    "requisitos": [
+      "MAT-21215",
+      "MAT-21524"
+    ]
+  },
+  {
+    "sem": "2",
+    "cod": "MAT-21225",
+    "asig": "MATEMÁTICA II",
+    "uc": "5",
+    "requisitos": [
+      "MAT-21215",
+      "MAT-21524"
+    ]
+  },
+  {
+    "sem": "2",
+    "cod": "MAT-21114",
+    "asig": "ALGEBRA LINEAL",
+    "uc": "4",
+    "requisitos": [
+      "MAT-21215",
+      "MAT-21524"
+    ]
+  },
+  {
+    "sem": "2",
+    "cod": "ADG-25141",
+    "asig": "SEMINARIO II",
+    "uc": "1",
+    "requisitos": [
+      "ADG-25131"
+    ]
+  },
+  {
+    "sem": "2",
+    "cod": "DIN-21123",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN",
+    "uc": "3",
+    "requisitos": [
+      "DIN-21113"
+    ]
+  },
+  {
+    "sem": "3",
+    "cod": "QUF-23025",
+    "asig": "FISICA II",
+    "uc": "5",
+    "requisitos": [
+      "QUF-23015",
+      "MAT-21225"
+    ]
+  },
+  {
+    "sem": "3",
+    "cod": "MAT-21235",
+    "asig": "MATEMATICA III",
+    "uc": "5",
+    "requisitos": [
+      "MAT-21225"
+    ]
+  },
+  {
+    "sem": "3",
+    "cod": "MAT-21414",
+    "asig": "PROBABILIDADES Y ESTADÍSTICA",
+    "uc": "4",
+    "requisitos": [
+      "MAT-21225"
+    ]
+  },
+  {
+    "sem": "3",
+    "cod": "SYC-22113",
+    "asig": "PROGRAMACIÓN",
+    "uc": "4",
+    "requisitos": [
+      "MAT-21114"
+    ]
+  },
+    {
+    "sem": "3",
+    "cod": "QUF-21114",
+    "asig": "QUÍMICA ORGÁNICA",
+    "uc": "4",
+    "requisitos": [
+      "QUF-22014"
+    ]
+  },
+  {
+    "sem": "3",
+    "cod": "DIN-21133",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN III",
+    "uc": "3",
+    "requisitos": [
+      "DIN-21123"
+    ]
+  },
+  {
+    "sem": "4",
+    "cod": "OPE-33144",
+    "asig": "TERMODINAMICA",
+    "uc": null,
+    "requisitos": [
+      "QUF-23025"
+    ]
+  },
+  {
+    "sem": "4",
+    "cod": "OPE-33114",
+    "asig": "MECANICA",
+    "uc": null,
+    "requisitos": [
+      "MAT-21235"
+    ]
+  },
+  {
+    "sem": "4",
+    "cod": "OPE-33154",
+    "asig": "MECÁNICA DE LOS FLUIDOS",
+    "uc": "4",
+    "requisitos": []
+  },
+  {
+    "sem": "4",
+    "cod": "ECO-36113",
+    "asig": "PROGRAMACIÓN Y MÉTODO NUMÉRICO",
+    "uc": "3",
+    "requisitos": [
+      "SYC-22113"
+    ]
+  },
+  {
+    "sem": "4",
+    "cod": "PET-34112",
+    "asig": "INTRODUCCIÓN A LA INGENIERÍA DE PETROLEO",
+    "uc": "2",
+    "requisitos": []
+  },
+  {
+    "sem": "4",
+    "cod": "ECO-35113",
+    "asig": "ECONOMÍA",
+    "uc": null,
+    "requisitos": []
+  },
+  {
+    "sem": "4",
+    "cod": "DIN-31143",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN IV",
+    "uc": "3",
+    "requisitos": [
+      "DIN-21133"
+    ]
+  },
+  {
+    "sem": "5",
+    "cod": "AGG-33154",
+    "asig": "MARCO LEGAL EJERCICIO PROFESIONAL DE LA INGENIERÍA",
+    "uc": "4",
+    "requisitos": []
+  },
+  {
+    "sem": "5",
+    "cod": "OPE-33164",
+    "asig": "RESISTENCIA DE LOS MATERIALES",
+    "uc": "4",
+    "requisitos": [
+      "OPE-33114"
+    ]
+  },
+  {
+    "sem": "5",
+    "cod": "PET-34124",
+    "asig": "PRINCIPIOS DE GEOLOGÍA PETROLERA",
+    "uc": "4",
+    "requisitos": [
+      "PET-34112"
+    ]
+  },
+  {
+    "sem": "5",
+    "cod": "PET-34315",
+    "asig": "INGENIERÍA DE YACIMIENTOS I",
+    "uc": "5",
+    "requisitos": [
+    ]
+  },
+  {
+    "sem": "5",
+    "cod": "PET-34144",
+    "asig": "INGENIERÍA DE PERFORACIÓN",
+    "uc": "4",
+    "requisitos": [
+      "PET-34112",
+      "OPE-33154"
+    ]
+  },
+  {
+    "sem": "5",
+    "cod": "PET-34413",
+    "asig": "REGISTROS DE POZOS",
+    "uc": "3",
+    "requisitos": [
+    ]
+  },
+  {
+    "sem": "5",
+    "cod": "ELV-00001",
+    "asig": "ELECTIVA NO TÉCNICA",
+    "uc": "3",
+    "requisitos": []
+  },
+  {
+    "sem": "5",
+    "cod": "ADG-10820",
+    "asig": "CÁTEDRA BOLIVARIANA I",
+    "uc": null,
+    "requisitos": []
+  },
+  {
+    "sem": "5",
+    "cod": "DIN-31153",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN V",
+    "uc": "3",
+    "requisitos": [
+      "DIN-31143"
+    ]
+  },
+  {
+    "sem": "6",
+    "cod": "PET-34133",
+    "asig": "GEOLOGIA PETROLERA",
+    "uc": "3",
+    "requisitos": [
+      "PET-34124"
+    ]
+  },
+  {
+    "sem": "6",
+    "cod": "PET-34183",
+    "asig": "TRATAMIENTO DE GAS",
+    "uc": null,
+    "requisitos": [
+      "OPE-33144"
+    ]
+  },
+  {
+    "sem": "6",
+    "cod": "PET-34214",
+    "asig": "INGENIERÍA DE PRODUCCIÓN I",
+    "uc": "4",
+    "requisitos": [
+      "PET-34124"
+    ]
+  },
+  {
+    "sem": "6",
+    "cod": "PET-34163",
+    "asig": "PERFORACIÓN AVANZADA",
+    "uc": "3",
+    "requisitos": [
+      "PET-34144"
+    ]
+  },
+  {
+    "sem": "6",
+    "cod": "PET-34325",
+    "asig": "INGENIERÍA DE YACIMIENTOS II",
+    "uc": "5",
+    "requisitos": [
+      "PET-34315"
+    ]
+  },
+  {
+    "sem": "6",
+    "cod": "PET-33214",
+    "asig": "HIGIENE Y SEGURIDAD INDUSTRIAL",
+    "uc": null,
+    "requisitos": []
+  },
+  {
+    "sem": "6",
+    "cod": "ELV-00002",
+    "asig": "ELECTIVA NO TÉCNICA",
+    "uc": "3",
+    "requisitos": []
+  },
+  {
+    "sem": "6",
+    "cod": "ADG-10821",
+    "asig": "CATEDRA BOLIVARIANA I",
+    "uc": null,
+    "requisitos": []
+  },
+  {
+    "sem": "6",
+    "cod": "DIN-31163",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN VI",
+    "uc": "3",
+    "requisitos": [
+      "DIN-31153"
+    ]
+  },
+  {
+    "sem": "7",
+    "cod": "GYP-37133",
+    "asig": "CONTROL DE GESTIÓN PETROLERA",
+    "uc": null,
+    "requisitos": [
+      "PET-34124"
+    ]
+  },
+  {
+    "sem": "7",
+    "cod": "ADG-30214",
+    "asig": "METODOLOGÍA DE LA INVESTIGACIÓN",
+    "uc": "4",
+    "requisitos": []
+  },
+  {
+    "sem": "7",
+    "cod": "PET-34224",
+    "asig": "INGENIERÍA DE PRODUCCIÓN II",
+    "uc": "4",
+    "requisitos": [
+      "PET-34214"
+    ]
+  },
+  {
+    "sem": "7",
+    "cod": "PET-34335",
+    "asig": "INGENIERIA DE YACIMIENTOS III",
+    "uc": "5",
+    "requisitos": [
+      "PET-34325"
+    ]
+  },
+  {
+    "sem": "7",
+    "cod": "PET-34613",
+    "asig": "REACONDICIONAMIENTO DE POZOS",
+    "uc": "3",
+    "requisitos": [
+      "PET-34163"
+    ]
+  },
+  {
+    "sem": "7",
+    "cod": "PET-34513",
+    "asig": "PROCESAMIENTO DE HIDROCARBUROS",
+    "uc": "3",
+    "requisitos": [
+    ]
+  },
+  {
+    "sem": "7",
+    "cod": "ELV-00003",
+    "asig": "ELECTIVA TÉCNICA",
+    "uc": "3",
+    "requisitos": []
+  },
+  {
+    "sem": "7",
+    "cod": "DIN-31173",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN VII",
+    "uc": "3",
+    "requisitos": [
+      "DIN-31163"
+    ]
+  },
+  {
+    "sem": "8",
+    "cod": "PET-34193",
+    "asig": "REFINACIÓN DEL GAS",
+    "uc": "3",
+    "requisitos": [
+      "PET-34183"
+    ]
+  },
+  {
+    "sem": "8",
+    "cod": "PET-34433",
+    "asig": "PRUEBA DE POZOS",
+    "uc": "3",
+    "requisitos": [
+      "PET-34183"
+    ]
+  },
+  {
+    "sem": "8",
+    "cod": "PET-34344",
+    "asig": "EXPLOTACIÓN DE YACIMIENTOS DE CRUDOS PESADOS",
+    "uc": "4",
+    "requisitos": [
+      "PET-34183"
+    ]
+  },
+  {
+    "sem": "8",
+    "cod": "PET-34173",
+    "asig": "GERENCIA DE PROYECTOS DE INGENIERÍA DE GAS Y PETRÓLEO",
+    "uc": "3",
+    "requisitos": []
+  },
+  {
+    "sem": "8",
+    "cod": "ELV-00004",
+    "asig": "ELECTIVA TÉCNICA",
+    "uc": "3",
+    "requisitos": []
+  },
+  {
+    "sem": "8",
+    "cod": "DIN-31183",
+    "asig": "DEFENSA INTEGRAL DE LA NACIÓN VIII",
+    "uc": "3",
+    "requisitos": [
+      "DIN-31173"
+    ]
+  },
+  {
+    "sem": "9",
+    "cod": "PSI-30010",
+    "asig": "PASANTIA",
+    "uc": "10",
+    "requisitos": [
+      "200 U.C"
+    ]
+  },
+  {
+    "sem": "10",
+    "cod": "TGR-30010",
+    "asig": "TRABAJO ESPECIAL DE GRADO",
+    "uc": "10",
+    "requisitos": [
+      "200 U.C"
+    ]
+  }
+]
