@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- Referencias a elementos del DOM ---
     const jsonUpload = document.getElementById('jsonUpload');
@@ -7,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let courseData = [];
     let completedCourses = new Set();
+
+    
 
     // --- Función para cargar y renderizar una malla curricular ---
     function loadCurriculum(fileName) {
@@ -19,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(data => {
                 courseData = data;
+                console.log(courseData);
                 completedCourses = new Set(); // Reiniciar materias completadas
                 renderCurriculum();
                 careerModal.style.display = 'none'; // Ocultar el popup después de cargar
@@ -28,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error(error);
             });
     }
-
+    
     // --- Lógica del Popup de Selección de Carrera ---
     careerModal.addEventListener('click', (event) => {
         // Comprobar si se hizo clic en un botón con el atributo 'data-file'
@@ -76,6 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
             semesters[semNum].forEach(course => {
                 const subjectCard = document.createElement('div');
                 subjectCard.classList.add('subject-card');
+                if (course.hell == "yes") {
+                    subjectCard.addEventListener('click', showHellMessage);
+                    console.log(course.asig)
+                } 
+
                 subjectCard.dataset.cod = course.cod;
                 subjectCard.innerHTML = `
                     <div class="name">${course.asig}</div>
@@ -143,3 +153,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
+
+
+
+
+// Función para mostrar el overlay
+const showHellMessage = () => {
+    const overlay = document.getElementById('hell-overlay');
+    // Añade la clase 'show' para activar el CSS
+    overlay.classList.add('show');
+
+    // Después de 3 segundos (duración de la animación), oculta el overlay
+    setTimeout(() => {
+        overlay.classList.remove('show');
+    }, 3000);
+};
+
+// Añadir el evento de clic a cada elemento encontrado
+

@@ -288,6 +288,7 @@
     "cod": "CIV-30144",
     "asig": "MECANICA DE LOS SUELOS",
     "uc": "4",
+    "hell": "yes",
     "requisitos": [
       "CIV-30123"
     ]
