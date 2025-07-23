@@ -24,70 +24,26 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #6b7280;
         }
-        /* El contenedor del overlay que cubre toda la pantalla */
-        .hell-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.75); /* Fondo semitransparente */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-
-            /* Oculto por defecto */
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+        /* Animación para el mensaje de "Infierno" */
+        .hell-animation {
+            animation: hell-zoom 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
-
-        /* Clase que se añade con JS para mostrar el overlay */
-        .hell-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* El texto del mensaje */
-        .hell-text {
-            color: red;
-            font-size: 8vw; /* Tamaño de fuente responsivo */
-            font-weight: bold;
-            text-align: center;
-            transform: scale(0); /* Estado inicial de la animación */
-            opacity: 0; /* Estado inicial de la animación */
-        }
-
-        /* Cuando el overlay es visible, se aplica la animación al texto */
-        .hell-overlay.show .hell-text {
-            animation: zoomFade 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
-
-        /* Definición de la animación */
-        @keyframes zoomFade {
+        @keyframes hell-zoom {
             0% {
-                transform: scale(0);
                 opacity: 0;
+                transform: scale(0.5);
             }
-            40% {
+            20% {
+                opacity: 1;
                 transform: scale(1.1);
-                opacity: 1;
             }
-            60% {
-                transform: scale(1);
+            80% {
                 opacity: 1;
+                transform: scale(1);
             }
             100% {
-                transform: scale(1);
                 opacity: 0;
-            }
-        }
-
-        /* Ajuste para pantallas más pequeñas (móviles) */
-        @media (max-width: 768px) {
-            .hell-text {
-                font-size: 12vw; /* Hacemos la fuente un poco más grande en móviles */
+                transform: scale(0.8);
             }
         }
     </style>
@@ -130,7 +86,6 @@
 
         <!-- Contenedor de la Malla -->
         <main id="malla-container" class="w-full md:overflow-x-auto pb-4">
-            <!-- Se cambia la clase para ser responsivo: block en móvil, flex en escritorio -->
             <div id="malla-grid" class="block space-y-8 md:flex md:space-y-0 md:space-x-4">
                 <!-- Las columnas de semestres se generarán aquí -->
             </div>
@@ -141,6 +96,7 @@
             <p class="text-xl text-gray-400">Cargando malla curricular...</p>
         </div>
     </div>
+
     <div class="fixed bottom-4 right-4 z-50">
         <div class="bg-gray-800 bg-opacity-80 backdrop-blur-sm text-gray-300 text-sm p-3 rounded-lg shadow-lg flex items-center space-x-4">
             <span>Sitio Web Creado por Miguel Padron</span>
@@ -171,9 +127,11 @@
             </div>
         </div>
     </div>
-    <div id="hell-overlay" class="hell-overlay">
-        <div class="hell-text">Sobreviviste al Infierno</div>
+    <!-- Mensaje de "Infierno" -->
+    <div id="hell-overlay" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
+        <h1 id="hell-text" class="text-5xl md:text-8xl font-black text-red-600 text-center select-none"></h1>
     </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURACIÓN Y ELEMENTOS DEL DOM ---
@@ -182,7 +140,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const mallaGrid = document.getElementById('malla-grid');
     const loadingState = document.getElementById('loading-state');
     const progressSummary = document.getElementById('progress-summary');
-    const hellasig = ["MEC-31814", "CIV-30144"]; 
+    const hellOverlay = document.getElementById('hell-overlay');
+    const hellText = document.getElementById('hell-text');
+
+    // --- INICIO DE LA NUEVA SECCIÓN ---
+    // Lista de códigos de las materias que activan el mensaje. ¡Puedes editar esta lista!
+    const hellSubjects = new Set(['MEC-31814']);
+    // --- FIN DE LA NUEVA SECCIÓN ---
 
     let mallaData = {};
     let approvedSubjects = new Set();
@@ -264,19 +228,15 @@ document.addEventListener('DOMContentLoaded', () => {
         mallaGrid.innerHTML = '';
 
         for (let i = 1; i <= career.maxSemester; i++) {
-            // Se ajusta la clase para ser responsivo
             const semesterCol = document.createElement('div');
             semesterCol.className = 'semester-column w-full md:w-64 md:flex-shrink-0';
             semesterCol.innerHTML = `<h2 class="text-lg font-bold text-white mb-4 text-center">Semestre ${i}</h2>`;
             
             const subjectsContainer = document.createElement('div');
-            
-            // En móvil las tarjetas se muestran en una grilla, en escritorio en una columna
             subjectsContainer.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-3';
+            
             const subjects = career.semestres[i] || [];
-            subjects.forEach(asig => {
-                subjectsContainer.appendChild(createSubjectCard(asig))
-            });
+            subjects.forEach(asig => subjectsContainer.appendChild(createSubjectCard(asig)));
             
             semesterCol.appendChild(subjectsContainer);
             mallaGrid.appendChild(semesterCol);
@@ -287,10 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const createSubjectCard = (asig) => {
         const card = document.createElement('div');
         card.dataset.codigo = asig.codigo;
-        if (hellasig.includes(asig.codigo) ){
-            card.addEventListener('click', showHellMessage);
 
-        }
         const isApproved = approvedSubjects.has(asig.codigo);
         const arePrerequisitesMet = checkPrerequisites(asig.requisitos);
         
@@ -317,7 +274,9 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         card.addEventListener('click', () => {
-            if (arePrerequisitesMet) toggleApproval(asig.codigo);
+            if (isApproved || arePrerequisitesMet) {
+                toggleApproval(asig.codigo);
+            }
         });
         return card;
     };
@@ -327,15 +286,50 @@ document.addEventListener('DOMContentLoaded', () => {
         return requisitos.every(req => approvedSubjects.has(req));
     };
 
+    const recursivelyDeselectDependents = (deselectedCodigo) => {
+        if (!currentCareer || !mallaData[currentCareer]) return;
+        const allCareerSubjects = Object.values(mallaData[currentCareer].semestres).flat();
+
+        allCareerSubjects.forEach(subject => {
+            if (approvedSubjects.has(subject.codigo) && subject.requisitos.includes(deselectedCodigo)) {
+                approvedSubjects.delete(subject.codigo);
+                recursivelyDeselectDependents(subject.codigo);
+            }
+        });
+    };
+
     const toggleApproval = (codigo) => {
-        if (approvedSubjects.has(codigo)) {
+        const wasPreviouslyApproved = approvedSubjects.has(codigo);
+
+        if (wasPreviouslyApproved) {
             approvedSubjects.delete(codigo);
+            recursivelyDeselectDependents(codigo);
         } else {
             approvedSubjects.add(codigo);
+            // --- INICIO DE LA NUEVA LÓGICA ---
+            // Solo muestra el mensaje si la materia está en la lista y se está MARCANDO
+            if (hellSubjects.has(codigo)) {
+                showHellMessage();
+            }
+            // --- FIN DE LA NUEVA LÓGICA ---
         }
         saveState();
         renderMalla();
     };
+
+    // --- INICIO DE LA NUEVA FUNCIÓN ---
+    const showHellMessage = () => {
+        hellText.textContent = "Has sobrevivido al Infierno";
+        hellOverlay.classList.remove('hidden');
+        hellText.classList.add('hell-animation');
+
+        // Ocultar el mensaje después de que termine la animación
+        setTimeout(() => {
+            hellOverlay.classList.add('hidden');
+            hellText.classList.remove('hell-animation');
+        }, 2500); // La duración debe coincidir con la animación CSS
+    };
+    // --- FIN DE LA NUEVA FUNCIÓN ---
 
     const updateSummary = () => {
         if (!currentCareer || !mallaData[currentCareer]) return;
@@ -380,17 +374,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- INICIO ---
     initialize();
 });
-
-const showHellMessage = () => {
-    const overlay = document.getElementById('hell-overlay');
-    // Añade la clase 'show' para activar el CSS
-    overlay.classList.add('show');
-
-    // Después de 3 segundos (duración de la animación), oculta el overlay
-    setTimeout(() => {
-        overlay.classList.remove('show');
-    }, 3000);
-};
 </script>
 
 </body>
