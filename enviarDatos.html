@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carga Masiva de Asignaturas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #111827;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+        /* Ocultar el input de archivo por defecto */
+        #file-upload {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-300 font-sans">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Carga Masiva de Asignaturas</h1>
+            <p class="mt-2 text-gray-400">Sube un archivo .json para añadir múltiples asignaturas a la vez.</p>
+        </header>
+
+        <main class="bg-gray-800 rounded-lg shadow-xl p-6 md:p-8">
+            <!-- Zona de Carga de Archivo -->
+            <div class="text-center">
+                <label for="file-upload" class="cursor-pointer inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300">
+                    Seleccionar Archivo .json
+                </label>
+                <input type="file" id="file-upload" accept=".json,application/json">
+                <p id="file-name" class="mt-4 text-gray-400">Ningún archivo seleccionado</p>
+            </div>
+
+            <!-- Vista Previa y Botón de Acción -->
+            <div id="preview-section" class="hidden mt-6">
+                <h2 class="text-xl font-semibold text-white mb-3">Asignaturas Encontradas</h2>
+                <div id="subjects-preview" class="max-h-48 overflow-y-auto bg-gray-900 rounded-lg p-3 text-sm space-y-1">
+                    <!-- La lista de asignaturas se mostrará aquí -->
+                </div>
+                <div class="text-center mt-6">
+                    <button id="process-btn" class="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition-opacity duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        Añadir Asignaturas a la Base de Datos
+                    </button>
+                </div>
+            </div>
+
+            <!-- Registro de Progreso -->
+            <div id="log-section" class="hidden mt-6">
+                <h2 class="text-xl font-semibold text-white mb-3">Registro de Proceso</h2>
+                <div id="log-output" class="max-h-64 overflow-y-auto bg-gray-900 rounded-lg p-4 font-mono text-sm space-y-2">
+                    <!-- Los mensajes de estado aparecerán aquí -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="fixed bottom-4 right-4 z-50">
+        <div class="bg-gray-800 bg-opacity-80 backdrop-blur-sm text-gray-300 text-sm p-3 rounded-lg shadow-lg flex items-center space-x-4">
+            <span>Sitio Web Creado por Miguel Padron</span>
+            
+            <!-- Separador Vertical -->
+            <div class="border-l border-gray-600 h-5"></div>
+
+            <!-- Contenedor de Iconos -->
+            <div class="flex items-center space-x-3">
+                <!-- Icono de LinkedIn -->
+                <a href="https://linkedin.com/in/tu-usuario" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="LinkedIn">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.25 6.5 1.75 1.75 0 016.5 8.25zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
+                    </svg>
+                </a>
+                <!-- Icono de GitHub -->
+                <a href="https://github.com/tu-usuario" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="GitHub">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.492.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path>
+                    </svg>
+                </a>
+                <!-- Icono de X (Twitter) -->
+                <a href="https://x.com/tu-usuario" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="X (Twitter)">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H4.68l4.713 6.231L18.244 2.25zM16.971 19.694h1.5l-8.28-11.08h-1.5l8.28 11.08z"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- CONFIGURACIÓN Y ELEMENTOS DEL DOM ---
+    const API_BASE_URL = 'https://api-v3-flame.vercel.app/api/asignaturas';
+    const fileInput = document.getElementById('file-upload');
+    const fileNameDisplay = document.getElementById('file-name');
+    const previewSection = document.getElementById('preview-section');
+    const subjectsPreview = document.getElementById('subjects-preview');
+    const processBtn = document.getElementById('process-btn');
+    const logSection = document.getElementById('log-section');
+    const logOutput = document.getElementById('log-output');
+    const hellasig = ["MEC-31814"];
+
+    let subjectsToProcess = [];
+
+    // --- MANEJO DE ARCHIVOS ---
+
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (!file) {
+            resetUI();
+            return;
+        }
+
+        if (file.type !== 'application/json') {
+            alert('Por favor, selecciona un archivo .json válido.');
+            resetUI();
+            return;
+        }
+
+        fileNameDisplay.textContent = file.name;
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            try {
+                const content = JSON.parse(e.target.result);
+                if (!Array.isArray(content)) {
+                    throw new Error('El JSON debe ser un arreglo de asignaturas.');
+                }
+                subjectsToProcess = content;
+                displayPreview();
+            } catch (error) {
+                alert(`Error al leer el archivo JSON: ${error.message}`);
+                resetUI();
+            }
+        };
+
+        reader.onerror = () => {
+            alert('Ocurrió un error al leer el archivo.');
+            resetUI();
+        };
+
+        reader.readAsText(file);
+    });
+
+    const displayPreview = () => {
+        subjectsPreview.innerHTML = '';
+        if (subjectsToProcess.length === 0) {
+            subjectsPreview.innerHTML = `<p class="text-gray-500">El archivo no contiene asignaturas.</p>`;
+            processBtn.disabled = true;
+            return;
+        }
+
+        subjectsToProcess.forEach(asig => {
+            const p = document.createElement('p');
+            p.className = 'text-gray-300';
+            p.textContent = `• ${asig.codigo_asignatura || 'Sin código'}: ${asig.nombre_asignatura || 'Sin nombre'}`;
+            subjectsPreview.appendChild(p);
+        });
+
+        previewSection.classList.remove('hidden');
+        logSection.classList.add('hidden');
+        processBtn.disabled = false;
+    };
+
+    const resetUI = () => {
+        fileInput.value = '';
+        fileNameDisplay.textContent = 'Ningún archivo seleccionado';
+        previewSection.classList.add('hidden');
+        logSection.classList.add('hidden');
+        logOutput.innerHTML = '';
+        subjectsToProcess = [];
+        processBtn.disabled = true;
+    };
+
+    // --- LÓGICA DE PROCESAMIENTO ---
+
+    processBtn.addEventListener('click', async () => {
+        if (subjectsToProcess.length === 0) return;
+
+        processBtn.disabled = true;
+        logSection.classList.remove('hidden');
+        logOutput.innerHTML = '';
+
+        logMessage('Iniciando proceso de carga...', 'text-yellow-400');
+
+        // Procesar una por una para no saturar la API y dar feedback claro
+        for (const subject of subjectsToProcess) {
+            try {
+                // Validar que la asignatura tenga los campos mínimos
+                if (!subject.codigo_asignatura || !subject.nombre_asignatura) {
+                    throw new Error('Faltan campos requeridos (código o nombre).');
+                }
+                
+                logMessage(`Añadiendo ${subject.codigo_asignatura}...`, 'text-gray-400');
+                
+                const response = await fetch(API_BASE_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(subject)
+                });
+
+                if (response.ok) {
+                    logMessage(` -> Éxito: ${subject.codigo_asignatura} añadido.`, 'text-green-400');
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || `Error HTTP ${response.status}`);
+                }
+            } catch (error) {
+                logMessage(` -> Error con ${subject.codigo_asignatura}: ${error.message}`, 'text-red-400');
+            }
+        }
+
+        logMessage('Proceso completado.', 'text-yellow-400');
+        processBtn.disabled = false;
+        // Opcional: resetear la UI después de procesar
+        // setTimeout(resetUI, 5000);
+    });
+
+    const logMessage = (message, colorClass) => {
+        const p = document.createElement('p');
+        p.className = colorClass;
+        p.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        logOutput.appendChild(p);
+        // Hacer scroll automático al último mensaje
+        logOutput.scrollTop = logOutput.scrollHeight;
+    };
+
+});
+</script>

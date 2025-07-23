@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Asignaturas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.1/24/solid/heroicons.min.css" rel="stylesheet">
+    <style>
+        /* Estilos para la barra de desplazamiento */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937; /* dark:bg-gray-800 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563; /* dark:bg-gray-600 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; /* dark:bg-gray-500 */
+        }
+        /* Animación para modales y notificaciones */
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        .fade-out {
+            animation: fadeOut 0.3s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 font-sans antialiased">
+
+    <!-- Contenedor principal -->
+    <div class="container mx-auto p-4 md:p-8">
+        
+        <!-- Cabecera -->
+        <header class="flex flex-col md:flex-row justify-between md:items-center mb-6 gap-4">
+            <h1 class="text-3xl font-bold text-white">Gestor de Asignaturas</h1>
+            <button id="add-new-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center transition-colors duration-300 w-full md:w-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
+                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
+                </svg>
+                Añadir Asignatura
+            </button>
+        </header>
+
+        <!-- Pestañas de Carreras -->
+        <div id="tabs-container" class="mb-6 border-b border-gray-700 overflow-x-auto">
+            <div class="flex space-x-2 md:space-x-4 whitespace-nowrap">
+                 <!-- Las pestañas se generarán aquí -->
+            </div>
+        </div>
+
+        <!-- Contenedor de Asignaturas -->
+        <div id="asignaturas-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Las tarjetas de asignaturas se insertarán aquí -->
+        </div>
+        
+        <!-- Estado de carga -->
+        <div id="loading-state" class="text-center py-10">
+            <p class="text-lg text-gray-400">Cargando asignaturas...</p>
+        </div>
+
+        <!-- Estado vacío -->
+        <div id="empty-state" class="hidden text-center py-10 bg-gray-800 rounded-lg">
+            <p class="text-lg text-gray-400">No se encontraron asignaturas para la carrera seleccionada.</p>
+        </div>
+
+    </div>
+
+    <!-- Modal para Añadir/Editar Asignatura -->
+    <div id="form-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+        <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto fade-in">
+            <form id="asignatura-form" class="p-8">
+                <h2 id="modal-title" class="text-2xl font-bold mb-6 text-white"></h2>
+                <input type="hidden" id="edit-mode-codigo">
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label for="codigo_asignatura" class="block text-sm font-medium text-gray-300 mb-1">Código</label>
+                        <input type="text" id="codigo_asignatura" required class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label for="nombre_asignatura" class="block text-sm font-medium text-gray-300 mb-1">Nombre</label>
+                        <input type="text" id="nombre_asignatura" required class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label for="unidades_credito" class="block text-sm font-medium text-gray-300 mb-1">U.C.</label>
+                        <input type="number" id="unidades_credito" required class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold mt-6 mb-4 text-white">Carreras</h3>
+                <div id="carreras-container" class="space-y-4">
+                    <!-- Los campos de carrera se añadirán aquí dinámicamente -->
+                </div>
+
+                <button type="button" id="add-carrera-btn" class="mt-4 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg flex items-center text-sm">
+                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2"><path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" /></svg>
+                    Añadir Carrera
+                </button>
+
+                <div class="flex justify-end mt-8 space-x-4">
+                    <button type="button" id="cancel-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg">Cancelar</button>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal de Confirmación de Eliminación -->
+    <div id="delete-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+        <div class="bg-gray-800 rounded-lg shadow-xl p-8 max-w-sm w-full fade-in">
+            <h2 class="text-xl font-bold mb-4">Confirmar Eliminación</h2>
+            <p id="delete-message" class="mb-6">¿Estás seguro de que deseas eliminar esta asignatura?</p>
+            <div class="flex justify-end space-x-4">
+                <button id="cancel-delete-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">Cancelar</button>
+                <button id="confirm-delete-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">Eliminar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notificación Toast -->
+    <div id="toast-notification" class="hidden fixed bottom-5 right-5 bg-green-600 text-white py-2 px-5 rounded-lg shadow-lg z-50">
+        <p id="toast-message"></p>
+    </div>
+    <div class="fixed bottom-4 right-4 z-50">
+        <div class="bg-gray-800 bg-opacity-80 backdrop-blur-sm text-gray-300 text-sm p-3 rounded-lg shadow-lg flex items-center space-x-4">
+            <span>Sitio Web Creado por Miguel Padron</span>
+            
+            <!-- Separador Vertical -->
+            <div class="border-l border-gray-600 h-5"></div>
+
+            <!-- Contenedor de Iconos -->
+            <div class="flex items-center space-x-3">
+                <!-- Icono de LinkedIn -->
+                <a href="https://linkedin.com/in/tu-usuario" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="LinkedIn">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.25 6.5 1.75 1.75 0 016.5 8.25zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
+                    </svg>
+                </a>
+                <!-- Icono de GitHub -->
+                <a href="https://github.com/tu-usuario" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="GitHub">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.492.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path>
+                    </svg>
+                </a>
+                <!-- Icono de X (Twitter) -->
+                <a href="https://x.com/tu-usuario" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="X (Twitter)">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H4.68l4.713 6.231L18.244 2.25zM16.971 19.694h1.5l-8.28-11.08h-1.5l8.28 11.08z"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- CONFIGURACIÓN Y ELEMENTOS DEL DOM ---
+    const API_BASE_URL = 'https://api-v3-flame.vercel.app/api/asignaturas';
+    
+    const grid = document.getElementById('asignaturas-grid');
+    const loadingState = document.getElementById('loading-state');
+    const emptyState = document.getElementById('empty-state');
+    const tabsContainer = document.getElementById('tabs-container').querySelector('.flex');
+    
+    const formModal = document.getElementById('form-modal');
+    const asignaturaForm = document.getElementById('asignatura-form');
+    const modalTitle = document.getElementById('modal-title');
+    const editModeCodigo = document.getElementById('edit-mode-codigo');
+    const carrerasContainer = document.getElementById('carreras-container');
+    
+    const deleteModal = document.getElementById('delete-modal');
+    const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+
+    let allAsignaturas = [];
+    let activeTab = 'Todas';
+    let codigoParaBorrar = null;
+
+    // --- FUNCIONES DE LA API ---
+
+    const fetchAsignaturas = async () => {
+        loadingState.style.display = 'block';
+        grid.innerHTML = '';
+        emptyState.style.display = 'none';
+        try {
+            const response = await fetch(API_BASE_URL, { mode: 'cors' });
+            if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+            
+            allAsignaturas = await response.json();
+            renderTabs();
+            renderAsignaturas();
+        } catch (error) {
+            console.error("Error de fetch:", error);
+            let userMessage = 'Error al cargar las asignaturas. Intenta de nuevo.';
+            if (error instanceof TypeError) {
+                userMessage = 'No se pudo conectar a la API. Revisa tu conexión o un posible bloqueo (CORS).';
+            }
+            showToast(userMessage, true);
+            emptyState.querySelector('p').textContent = userMessage;
+            emptyState.style.display = 'block';
+        } finally {
+            loadingState.style.display = 'none';
+        }
+    };
+
+    // --- FUNCIONES DE RENDERIZADO ---
+
+    const renderTabs = () => {
+        const carreras = new Set();
+        allAsignaturas.forEach(asig => asig.carreras.forEach(c => carreras.add(c.codigo_carrera)));
+        const sortedCarreras = ['Todas', ...Array.from(carreras).sort()];
+        
+        tabsContainer.innerHTML = sortedCarreras.map(carrera => `
+            <button class="tab-btn py-3 px-4 text-base font-medium border-b-2 transition-colors duration-300 ${activeTab === carrera ? 'text-indigo-400 border-indigo-400' : 'text-gray-400 border-transparent hover:text-gray-200'}" data-carrera="${carrera}">
+                ${carrera}
+            </button>
+        `).join('');
+    };
+
+    const renderAsignaturas = () => {
+        grid.innerHTML = '';
+        const filteredAsignaturas = activeTab === 'Todas'
+            ? allAsignaturas
+            : allAsignaturas.filter(a => a.carreras.some(c => c.codigo_carrera === activeTab));
+
+        emptyState.style.display = filteredAsignaturas.length === 0 ? 'block' : 'none';
+
+        filteredAsignaturas.forEach(asig => {
+            const card = document.createElement('div');
+            card.className = 'bg-gray-800 rounded-lg shadow-lg p-5 flex flex-col justify-between transition-transform hover:scale-105 duration-300';
+            
+            const allRequisitos = new Set();
+            asig.carreras.forEach(c => c.requisitos?.forEach(r => allRequisitos.add(r)));
+            const requisitosList = Array.from(allRequisitos);
+
+            card.innerHTML = `
+                <div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-white pr-2">${asig.nombre_asignatura}</h3>
+                        <span class="flex-shrink-0 bg-indigo-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full">${asig.codigo_asignatura}</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-4">Créditos: ${asig.unidades_credito}</p>
+                    
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-gray-300 mb-2">Carreras:</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${asig.carreras.map(c => `<span class="bg-gray-700 text-gray-300 text-xs font-medium px-2 py-1 rounded">${c.codigo_carrera} (Sem ${c.semestre})</span>`).join('')}
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold text-gray-300 mb-2">Requisitos:</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${requisitosList.length > 0 ? requisitosList.map(r => `<span class="bg-gray-700 text-gray-300 text-xs font-medium px-2 py-1 rounded">${r}</span>`).join('') : '<span class="text-gray-500 text-xs">Ninguno</span>'}
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button class="edit-btn p-2 text-gray-400 hover:text-white" data-codigo="${asig.codigo_asignatura}" title="Editar">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.42a4 4 0 0 0-.886 1.343Z" /></svg>
+                    </button>
+                    <button class="delete-btn p-2 text-gray-400 hover:text-red-500" data-codigo="${asig.codigo_asignatura}" data-nombre="${asig.nombre_asignatura}" title="Eliminar">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.58.22-2.365.468a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193v-.443A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd" /></svg>
+                    </button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    };
+
+    // --- MANEJO DE MODALES Y FORMULARIO ---
+
+    const openFormModal = (asignatura = null) => {
+        asignaturaForm.reset();
+        carrerasContainer.innerHTML = '';
+        if (asignatura) {
+            // Modo Edición: Se usan los datos ya cargados en 'allAsignaturas'
+            modalTitle.textContent = 'Editar Asignatura';
+            document.getElementById('codigo_asignatura').value = asignatura.codigo_asignatura;
+            document.getElementById('codigo_asignatura').readOnly = true;
+            document.getElementById('nombre_asignatura').value = asignatura.nombre_asignatura;
+            document.getElementById('unidades_credito').value = asignatura.unidades_credito;
+            editModeCodigo.value = asignatura.codigo_asignatura;
+            asignatura.carreras.forEach(c => addCarreraField(c));
+        } else {
+            // Modo Creación
+            modalTitle.textContent = 'Añadir Nueva Asignatura';
+            document.getElementById('codigo_asignatura').readOnly = false;
+            editModeCodigo.value = '';
+            addCarreraField();
+        }
+        formModal.classList.remove('hidden');
+    };
+
+    const closeModal = () => {
+        formModal.classList.add('hidden');
+        deleteModal.classList.add('hidden');
+    };
+
+    const addCarreraField = (carrera = null) => {
+        const div = document.createElement('div');
+        div.className = 'grid grid-cols-1 md:grid-cols-4 gap-2 bg-gray-700 p-3 rounded-lg';
+        div.innerHTML = `
+            <input type="text" placeholder="Cód. Carrera" value="${carrera?.codigo_carrera || ''}" class="carrera-codigo w-full bg-gray-600 border border-gray-500 text-white rounded p-2 text-sm" required>
+            <input type="number" placeholder="Semestre" value="${carrera?.semestre || ''}" class="carrera-semestre w-full bg-gray-600 border border-gray-500 text-white rounded p-2 text-sm" required>
+            <input type="text" placeholder="Requisitos (coma-sep)" value="${carrera?.requisitos?.join(',') || ''}" class="carrera-requisitos md:col-span-1 w-full bg-gray-600 border border-gray-500 text-white rounded p-2 text-sm">
+            <button type="button" class="remove-carrera-btn bg-red-600 hover:bg-red-700 text-white rounded p-2 text-sm flex justify-center items-center" title="Eliminar Carrera">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5Z" clip-rule="evenodd" /></svg>
+            </button>
+        `;
+        carrerasContainer.appendChild(div);
+    };
+
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+        const codigo = document.getElementById('codigo_asignatura').value;
+        const nombre = document.getElementById('nombre_asignatura').value;
+        const uc = document.getElementById('unidades_credito').value;
+        const isEdit = !!editModeCodigo.value;
+
+        const carrerasData = [];
+        carrerasContainer.querySelectorAll('.grid').forEach(field => {
+            const codigo_carrera = field.querySelector('.carrera-codigo').value;
+            const semestre = parseInt(field.querySelector('.carrera-semestre').value);
+            const requisitos = field.querySelector('.carrera-requisitos').value.split(',').map(r => r.trim()).filter(r => r);
+            if (codigo_carrera && semestre) {
+                carrerasData.push({ codigo_carrera, semestre, requisitos });
+            }
+        });
+        
+        if (carrerasData.length === 0) {
+            showToast('Debe añadir al menos una carrera.', true);
+            return;
+        }
+
+        const payload = {
+            codigo_asignatura: codigo,
+            nombre_asignatura: nombre,
+            unidades_credito: parseInt(uc),
+            carreras: carrerasData
+        };
+
+        try {
+            const url = isEdit ? `${API_BASE_URL}/${editModeCodigo.value}` : API_BASE_URL;
+            const response = await fetch(url, {
+                method: isEdit ? 'PUT' : 'POST',
+                mode: 'cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error en la operación');
+            }
+            
+            showToast(`Asignatura ${isEdit ? 'actualizada' : 'creada'} con éxito.`);
+            closeModal();
+            fetchAsignaturas();
+        } catch (error) {
+            showToast(error.message, true);
+        }
+    };
+    
+    const openDeleteModal = (codigo, nombre) => {
+        codigoParaBorrar = codigo;
+        document.getElementById('delete-message').textContent = `¿Estás seguro de que deseas eliminar la asignatura "${nombre}" (${codigo})?`;
+        deleteModal.classList.remove('hidden');
+    };
+
+    const handleDelete = async () => {
+        if (!codigoParaBorrar) return;
+        try {
+            const response = await fetch(`${API_BASE_URL}/${codigoParaBorrar}`, { method: 'DELETE', mode: 'cors' });
+            if (!response.ok) throw new Error('Error al eliminar');
+            showToast('Asignatura eliminada con éxito.');
+            closeModal();
+            codigoParaBorrar = null;
+            fetchAsignaturas();
+        } catch (error) {
+            showToast('Error al eliminar la asignatura.', true);
+        }
+    };
+
+    const showToast = (message, isError = false) => {
+        const toast = document.getElementById('toast-notification');
+        const toastMessage = document.getElementById('toast-message');
+        
+        toastMessage.textContent = message;
+        toast.className = `fixed bottom-5 right-5 text-white py-2 px-5 rounded-lg shadow-lg z-50 ${isError ? 'bg-red-600' : 'bg-green-600'}`;
+        
+        toast.classList.remove('hidden', 'fade-out');
+        toast.classList.add('fade-in');
+        
+        setTimeout(() => {
+            toast.classList.remove('fade-in');
+            toast.classList.add('fadeOut');
+            setTimeout(() => toast.classList.add('hidden'), 300);
+        }, 3000);
+    };
+
+    // --- EVENT LISTENERS ---
+
+    document.getElementById('add-new-btn').addEventListener('click', () => openFormModal());
+    document.getElementById('cancel-btn').addEventListener('click', closeModal);
+    document.getElementById('add-carrera-btn').addEventListener('click', () => addCarreraField());
+    asignaturaForm.addEventListener('submit', handleFormSubmit);
+
+    carrerasContainer.addEventListener('click', e => {
+        if (e.target.closest('.remove-carrera-btn')) {
+            e.target.closest('.grid').remove();
+        }
+    });
+
+    grid.addEventListener('click', e => {
+        const editBtn = e.target.closest('.edit-btn');
+        if (editBtn) {
+            // Lógica ajustada: Busca la asignatura en el array local 'allAsignaturas'
+            const asignatura = allAsignaturas.find(a => a.codigo_asignatura === editBtn.dataset.codigo);
+            if (asignatura) {
+                openFormModal(asignatura);
+            } else {
+                showToast('No se encontraron los datos de la asignatura para editar.', true);
+            }
+        }
+
+        const deleteBtn = e.target.closest('.delete-btn');
+        if (deleteBtn) {
+            openDeleteModal(deleteBtn.dataset.codigo, deleteBtn.dataset.nombre);
+        }
+    });
+    
+    tabsContainer.addEventListener('click', e => {
+        if (e.target.classList.contains('tab-btn')) {
+            activeTab = e.target.dataset.carrera;
+            renderTabs();
+            renderAsignaturas();
+        }
+    });
+    
+    confirmDeleteBtn.addEventListener('click', handleDelete);
+    document.getElementById('cancel-delete-btn').addEventListener('click', closeModal);
+
+    // Carga inicial de datos
+    fetchAsignaturas();
+});
+</script>
+
+</body>
+</html>

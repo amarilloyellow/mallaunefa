@@ -1,103 +1,397 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Malla Curricular Interactiva</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.1/24/outline/heroicons.min.css" rel="stylesheet">
     <style>
-        /* Estilos para el Popup (Modal) */
-        .modal-overlay {
-            position: fixed; /* Se queda fijo en la pantalla */
+        body {
+            background-color: #111827; /* bg-gray-900 */
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+        /* El contenedor del overlay que cubre toda la pantalla */
+        .hell-overlay {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
+            background-color: rgba(0, 0, 0, 0.75); /* Fondo semitransparente */
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000; /* Se asegura que esté por encima de todo */
+            z-index: 9999;
+
+            /* Oculto por defecto */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
         }
 
-        .modal-content {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
+        /* Clase que se añade con JS para mostrar el overlay */
+        .hell-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* El texto del mensaje */
+        .hell-text {
+            color: red;
+            font-size: 8vw; /* Tamaño de fuente responsivo */
+            font-weight: bold;
             text-align: center;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transform: scale(0); /* Estado inicial de la animación */
+            opacity: 0; /* Estado inicial de la animación */
         }
 
-        .modal-content h2 {
-            margin-top: 0;
+        /* Cuando el overlay es visible, se aplica la animación al texto */
+        .hell-overlay.show .hell-text {
+            animation: zoomFade 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
 
-        /* Contenedor para los botones */
-        .modal-buttons {
-            display: flex;
-            flex-direction: column; /* Apila los botones verticalmente */
-            gap: 10px; /* Espacio entre los botones */
+        /* Definición de la animación */
+        @keyframes zoomFade {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            40% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+            60% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
         }
 
-        .modal-buttons button {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.2s; /* Pequeña transición */
-        }
-
-        .modal-buttons button:hover {
-            background-color: #e0e0e0;
+        /* Ajuste para pantallas más pequeñas (móviles) */
+        @media (max-width: 768px) {
+            .hell-text {
+                font-size: 12vw; /* Hacemos la fuente un poco más grande en móviles */
+            }
         }
     </style>
 </head>
-<body>
-    <div id="careerModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2>Selecciona tu Carrera</h2>
-            <p>Elige la malla curricular que deseas visualizar.</p>
-            <div class="modal-buttons">
-                <button data-file="civil.json">Ingeniería Civil</button>
-                <button data-file="petroquimica.json">Ingeniería Petroquímica</button>
-                <button data-file="petroleo.json">Ingeniería de Petróleo</button>
-                <button data-file="desastres.json">Administración de Desastres</button>
-            </div>
-        </div>
-    </div>
-    <header>
-        <h1>Malla Curricular de Ingeniería Civil</h1>
-        <input type="file" id="jsonUpload" accept=".json">
-        <label for="jsonUpload" class="upload-button">Cargar Plan de Estudio</label>
-        <div id="ucCounter" class="uc-counter">
-            UC Totales: <span id="totalUc">0</span>
-        </div>
-    </header>
-    
+<body class="text-gray-300 font-sans">
 
-    <main id="curriculumGrid">
+    <div class="container mx-auto p-4 md:p-6">
+        <!-- Cabecera -->
+        <header class="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-4">
+            <h1 class="text-3xl font-bold text-white">Malla Curricular Interactiva</h1>
+            <div>
+                <label for="career-select" class="sr-only">Seleccionar Carrera</label>
+                <select id="career-select" class="bg-gray-800 border border-gray-700 text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5">
+                    <!-- Opciones de carrera se insertarán aquí -->
+                </select>
+            </div>
+        </header>
+
+        <!-- Resumen de Progreso -->
+        <section id="progress-summary" class="mb-6 p-4 bg-gray-800 rounded-lg hidden">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                <div>
+                    <span class="text-sm text-gray-400 block">Créditos Aprobados</span>
+                    <span id="approved-credits" class="text-2xl font-bold text-green-400">0</span>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-400 block">Créditos Totales</span>
+                    <span id="total-credits" class="text-2xl font-bold text-white">0</span>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-400 block">Asignaturas Aprobadas</span>
+                    <span id="approved-subjects-count" class="text-2xl font-bold text-green-400">0</span>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-400 block">Asignaturas Totales</span>
+                    <span id="total-subjects-count" class="text-2xl font-bold text-white">0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contenedor de la Malla -->
+        <main id="malla-container" class="w-full md:overflow-x-auto pb-4">
+            <!-- Se cambia la clase para ser responsivo: block en móvil, flex en escritorio -->
+            <div id="malla-grid" class="block space-y-8 md:flex md:space-y-0 md:space-x-4">
+                <!-- Las columnas de semestres se generarán aquí -->
+            </div>
         </main>
 
-    <script src="script.js"></script>
-    <div class="fixed-box">
-        <p>Sitio Creado por Miguel Padron</p>
-        <div class="social-links">
-            <a href="https://github.com/tu_usuario" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
-            <a href="https://linkedin.com/in/tu_perfil" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="https://twitter.com/tu_usuario" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="https://facebook.com/tu_pagina" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+        <!-- Estado de Carga / Mensajes -->
+        <div id="loading-state" class="text-center py-20">
+            <p class="text-xl text-gray-400">Cargando malla curricular...</p>
+        </div>
+    </div>
+    <div class="fixed bottom-4 right-4 z-50">
+        <div class="bg-gray-800 bg-opacity-80 backdrop-blur-sm text-gray-300 text-sm p-3 rounded-lg shadow-lg flex items-center space-x-4">
+            <span>Sitio Web Creado por Miguel Padron</span>
+            
+            <!-- Separador Vertical -->
+            <div class="border-l border-gray-600 h-5"></div>
+
+            <!-- Contenedor de Iconos -->
+            <div class="flex items-center space-x-3">
+                <!-- Icono de LinkedIn -->
+                <a href="https://linkedin.com/in/tu-usuario" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="LinkedIn">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.25 6.5 1.75 1.75 0 016.5 8.25zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
+                    </svg>
+                </a>
+                <!-- Icono de GitHub -->
+                <a href="https://github.com/tu-usuario" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="GitHub">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.492.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path>
+                    </svg>
+                </a>
+                <!-- Icono de X (Twitter) -->
+                <a href="https://x.com/tu-usuario" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="X (Twitter)">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H4.68l4.713 6.231L18.244 2.25zM16.971 19.694h1.5l-8.28-11.08h-1.5l8.28 11.08z"></path>
+                    </svg>
+                </a>
             </div>
+        </div>
     </div>
     <div id="hell-overlay" class="hell-overlay">
         <div class="hell-text">Sobreviviste al Infierno</div>
     </div>
-    
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- CONFIGURACIÓN Y ELEMENTOS DEL DOM ---
+    const API_BASE_URL = 'https://api-v3-flame.vercel.app/api/asignaturas';
+    const careerSelect = document.getElementById('career-select');
+    const mallaGrid = document.getElementById('malla-grid');
+    const loadingState = document.getElementById('loading-state');
+    const progressSummary = document.getElementById('progress-summary');
+    const hellasig = ["MEC-31814", "CIV-30144"]; 
+
+    let mallaData = {};
+    let approvedSubjects = new Set();
+    let currentCareer = null;
+
+    // --- LÓGICA PRINCIPAL ---
+
+    const initialize = async () => {
+        try {
+            const allAsignaturas = await fetchData();
+            mallaData = processData(allAsignaturas);
+            
+            if (populateCareerSelector()) {
+                currentCareer = careerSelect.value;
+                loadState();
+                renderMalla();
+                loadingState.style.display = 'none';
+            } else {
+                loadingState.innerHTML = `<p class="text-xl text-gray-400">No se encontraron carreras en la API.</p>`;
+                progressSummary.classList.add('hidden');
+            }
+        } catch (error) {
+            console.error("Error al inicializar:", error);
+            loadingState.innerHTML = `<p class="text-xl text-red-400">Error al cargar los datos de la API.</p>`;
+            progressSummary.classList.add('hidden');
+        }
+    };
+
+    const fetchData = async () => {
+        const response = await fetch(API_BASE_URL, { mode: 'cors' });
+        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+        return await response.json();
+    };
+
+    const processData = (asignaturas) => {
+        const data = {};
+        asignaturas.forEach(asig => {
+            asig.carreras.forEach(carreraInfo => {
+                const { codigo_carrera, semestre, requisitos } = carreraInfo;
+                if (!data[codigo_carrera]) {
+                    data[codigo_carrera] = { maxSemester: 0, semestres: {} };
+                }
+                if (!data[codigo_carrera].semestres[semestre]) {
+                    data[codigo_carrera].semestres[semestre] = [];
+                }
+                data[codigo_carrera].semestres[semestre].push({
+                    codigo: asig.codigo_asignatura,
+                    nombre: asig.nombre_asignatura,
+                    uc: asig.unidades_credito,
+                    requisitos: requisitos || []
+                });
+                if (semestre > data[codigo_carrera].maxSemester) {
+                    data[codigo_carrera].maxSemester = semestre;
+                }
+            });
+        });
+        return data;
+    };
+
+    const populateCareerSelector = () => {
+        const careerCodes = Object.keys(mallaData).sort();
+        if (careerCodes.length === 0) {
+            careerSelect.classList.add('hidden');
+            return false;
+        }
+        careerSelect.innerHTML = careerCodes.map(code => `<option value="${code}">${code}</option>`).join('');
+        careerSelect.classList.remove('hidden');
+        return true;
+    };
+
+    const renderMalla = () => {
+        if (!currentCareer || !mallaData[currentCareer]) {
+            mallaGrid.innerHTML = '';
+            progressSummary.classList.add('hidden');
+            return;
+        }
+
+        const career = mallaData[currentCareer];
+        mallaGrid.innerHTML = '';
+
+        for (let i = 1; i <= career.maxSemester; i++) {
+            // Se ajusta la clase para ser responsivo
+            const semesterCol = document.createElement('div');
+            semesterCol.className = 'semester-column w-full md:w-64 md:flex-shrink-0';
+            semesterCol.innerHTML = `<h2 class="text-lg font-bold text-white mb-4 text-center">Semestre ${i}</h2>`;
+            
+            const subjectsContainer = document.createElement('div');
+            
+            // En móvil las tarjetas se muestran en una grilla, en escritorio en una columna
+            subjectsContainer.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-3';
+            const subjects = career.semestres[i] || [];
+            subjects.forEach(asig => {
+                subjectsContainer.appendChild(createSubjectCard(asig))
+            });
+            
+            semesterCol.appendChild(subjectsContainer);
+            mallaGrid.appendChild(semesterCol);
+        }
+        updateSummary();
+    };
+
+    const createSubjectCard = (asig) => {
+        const card = document.createElement('div');
+        card.dataset.codigo = asig.codigo;
+        if (hellasig.includes(asig.codigo) ){
+            card.addEventListener('click', showHellMessage);
+
+        }
+        const isApproved = approvedSubjects.has(asig.codigo);
+        const arePrerequisitesMet = checkPrerequisites(asig.requisitos);
+        
+        let stateClasses = 'bg-gray-800 border-gray-700 cursor-pointer';
+        let stateIcon = '';
+
+        if (isApproved) {
+            stateClasses = 'bg-green-900/50 border-green-500 cursor-pointer';
+            stateIcon = `<div class="absolute top-2 right-2 text-green-400" title="Aprobada"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" /></svg></div>`;
+        } else if (!arePrerequisitesMet) {
+            stateClasses = 'bg-red-900/50 border-red-800 cursor-not-allowed opacity-60';
+            stateIcon = `<div class="absolute top-2 right-2 text-red-400" title="Bloqueada"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z" clip-rule="evenodd" /></svg></div>`;
+        }
+        
+        card.className = `relative p-3 rounded-lg border transition-all duration-200 hover:border-indigo-500 ${stateClasses}`;
+        
+        card.innerHTML = `
+            ${stateIcon}
+            <h3 class="font-bold text-sm text-white pr-6">${asig.nombre}</h3>
+            <p class="text-xs text-gray-400 mt-1">${asig.codigo} &bull; ${asig.uc} U.C.</p>
+            <div class="mt-2 text-xs text-gray-500">
+                Req: ${asig.requisitos.length > 0 ? asig.requisitos.join(', ') : 'Ninguno'}
+            </div>
+        `;
+
+        card.addEventListener('click', () => {
+            if (arePrerequisitesMet) toggleApproval(asig.codigo);
+        });
+        return card;
+    };
+
+    const checkPrerequisites = (requisitos) => {
+        if (!requisitos || requisitos.length === 0) return true;
+        return requisitos.every(req => approvedSubjects.has(req));
+    };
+
+    const toggleApproval = (codigo) => {
+        if (approvedSubjects.has(codigo)) {
+            approvedSubjects.delete(codigo);
+        } else {
+            approvedSubjects.add(codigo);
+        }
+        saveState();
+        renderMalla();
+    };
+
+    const updateSummary = () => {
+        if (!currentCareer || !mallaData[currentCareer]) return;
+        const career = mallaData[currentCareer];
+        let totalCredits = 0, approvedCredits = 0, totalSubjects = 0;
+        
+        Object.values(career.semestres).flat().forEach(asig => {
+            totalSubjects++;
+            totalCredits += asig.uc;
+            if (approvedSubjects.has(asig.codigo)) {
+                approvedCredits += asig.uc;
+            }
+        });
+
+        document.getElementById('approved-credits').textContent = approvedCredits;
+        document.getElementById('total-credits').textContent = totalCredits;
+        document.getElementById('approved-subjects-count').textContent = approvedSubjects.size;
+        document.getElementById('total-subjects-count').textContent = totalSubjects;
+        
+        progressSummary.classList.remove('hidden');
+    };
+
+    // --- MANEJO DE ESTADO (LocalStorage) ---
+
+    const saveState = () => {
+        localStorage.setItem(`aprobadas_${currentCareer}`, JSON.stringify(Array.from(approvedSubjects)));
+    };
+
+    const loadState = () => {
+        const saved = localStorage.getItem(`aprobadas_${currentCareer}`);
+        approvedSubjects = saved ? new Set(JSON.parse(saved)) : new Set();
+    };
+
+    // --- EVENT LISTENERS ---
+
+    careerSelect.addEventListener('change', (e) => {
+        currentCareer = e.target.value;
+        loadState();
+        renderMalla();
+    });
+
+    // --- INICIO ---
+    initialize();
+});
+
+const showHellMessage = () => {
+    const overlay = document.getElementById('hell-overlay');
+    // Añade la clase 'show' para activar el CSS
+    overlay.classList.add('show');
+
+    // Después de 3 segundos (duración de la animación), oculta el overlay
+    setTimeout(() => {
+        overlay.classList.remove('show');
+    }, 3000);
+};
+</script>
+
 </body>
 </html>
