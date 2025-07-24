@@ -33,7 +33,7 @@
     <div class="container mx-auto p-4 md:p-8 max-w-4xl">
         <header class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-white">Carga Masiva de Asignaturas</h1>
-            <p class="mt-2 text-gray-400">Sube un archivo .json para añadir múltiples asignaturas a la vez.</p>
+            <p class="mt-2 text-gray-400">Sube un archivo .json para añadir o actualizar múltiples asignaturas.</p>
         </header>
 
         <main class="bg-gray-800 rounded-lg shadow-xl p-6 md:p-8">
@@ -48,13 +48,13 @@
 
             <!-- Vista Previa y Botón de Acción -->
             <div id="preview-section" class="hidden mt-6">
-                <h2 class="text-xl font-semibold text-white mb-3">Asignaturas Encontradas</h2>
+                <h2 class="text-xl font-semibold text-white mb-3">Asignaturas a Procesar</h2>
                 <div id="subjects-preview" class="max-h-48 overflow-y-auto bg-gray-900 rounded-lg p-3 text-sm space-y-1">
                     <!-- La lista de asignaturas se mostrará aquí -->
                 </div>
                 <div class="text-center mt-6">
                     <button id="process-btn" class="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition-opacity duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                        Añadir Asignaturas a la Base de Datos
+                        Procesar Archivo
                     </button>
                 </div>
             </div>
@@ -69,37 +69,6 @@
         </main>
     </div>
 
-    <div class="fixed bottom-4 right-4 z-50">
-        <div class="bg-gray-800 bg-opacity-80 backdrop-blur-sm text-gray-300 text-sm p-3 rounded-lg shadow-lg flex items-center space-x-4">
-            <span>Sitio Web Creado por Miguel Padron</span>
-            
-            <!-- Separador Vertical -->
-            <div class="border-l border-gray-600 h-5"></div>
-
-            <!-- Contenedor de Iconos -->
-            <div class="flex items-center space-x-3">
-                <!-- Icono de LinkedIn -->
-                <a href="https://linkedin.com/in/tu-usuario" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="LinkedIn">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.25 6.5 1.75 1.75 0 016.5 8.25zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
-                    </svg>
-                </a>
-                <!-- Icono de GitHub -->
-                <a href="https://github.com/tu-usuario" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="GitHub">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.492.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path>
-                    </svg>
-                </a>
-                <!-- Icono de X (Twitter) -->
-                <a href="https://x.com/tu-usuario" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="X (Twitter)">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H4.68l4.713 6.231L18.244 2.25zM16.971 19.694h1.5l-8.28-11.08h-1.5l8.28 11.08z"></path>
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURACIÓN Y ELEMENTOS DEL DOM ---
@@ -111,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const processBtn = document.getElementById('process-btn');
     const logSection = document.getElementById('log-section');
     const logOutput = document.getElementById('log-output');
-    const hellasig = ["MEC-31814"];
 
     let subjectsToProcess = [];
 
@@ -185,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         processBtn.disabled = true;
     };
 
-    // --- LÓGICA DE PROCESAMIENTO ---
+    // --- LÓGICA DE PROCESAMIENTO (CORREGIDA) ---
 
     processBtn.addEventListener('click', async () => {
         if (subjectsToProcess.length === 0) return;
@@ -194,50 +162,97 @@ document.addEventListener('DOMContentLoaded', () => {
         logSection.classList.remove('hidden');
         logOutput.innerHTML = '';
 
-        logMessage('Iniciando proceso de carga...', 'text-yellow-400');
+        logMessage('Obteniendo lista de asignaturas existentes...', 'text-yellow-400');
 
-        // Procesar una por una para no saturar la API y dar feedback claro
-        for (const subject of subjectsToProcess) {
-            try {
-                // Validar que la asignatura tenga los campos mínimos
-                if (!subject.codigo_asignatura || !subject.nombre_asignatura) {
-                    throw new Error('Faltan campos requeridos (código o nombre).');
+        try {
+            // 1. Obtener todas las asignaturas existentes primero
+            const response = await fetch(API_BASE_URL, { mode: 'cors' });
+            if (!response.ok) throw new Error('No se pudo obtener la lista de asignaturas existentes.');
+            
+            const existingSubjectsArray = await response.json();
+            const existingSubjectsMap = new Map(existingSubjectsArray.map(s => [s.codigo_asignatura, s]));
+
+            logMessage(`Se encontraron ${existingSubjectsMap.size} asignaturas. Iniciando proceso...`, 'text-gray-400');
+
+            // 2. Procesar cada asignatura del archivo
+            for (const subjectFromFile of subjectsToProcess) {
+                if (!subjectFromFile.codigo_asignatura || !subjectFromFile.nombre_asignatura) {
+                    logMessage(` -> Error: Asignatura sin código o nombre omitida.`, 'text-red-400');
+                    continue;
                 }
-                
-                logMessage(`Añadiendo ${subject.codigo_asignatura}...`, 'text-gray-400');
-                
-                const response = await fetch(API_BASE_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(subject)
-                });
 
-                if (response.ok) {
-                    logMessage(` -> Éxito: ${subject.codigo_asignatura} añadido.`, 'text-green-400');
+                const existingSubject = existingSubjectsMap.get(subjectFromFile.codigo_asignatura);
+                
+                if (existingSubject) {
+                    // --- LÓGICA DE ACTUALIZACIÓN MEJORADA ---
+                    logMessage(`Actualizando ${subjectFromFile.codigo_asignatura}...`, 'text-blue-400');
+                    
+                    // Usar un Map para fusionar las carreras de forma inteligente
+                    const mergedCarrerasMap = new Map(existingSubject.carreras.map(c => [c.codigo_carrera, c]));
+                    
+                    // Iterar sobre las carreras del archivo y actualizar o añadir al Map
+                    subjectFromFile.carreras.forEach(newCarrera => {
+                        // Si la carrera ya existe, se actualiza. Si no, se añade.
+                        mergedCarrerasMap.set(newCarrera.codigo_carrera, newCarrera);
+                    });
+
+                    // Convertir el Map de nuevo a un array para el payload
+                    const mergedCarreras = Array.from(mergedCarrerasMap.values());
+
+                    const payload = {
+                        codigo_asignatura: subjectFromFile.codigo_asignatura,
+                        nombre_asignatura: subjectFromFile.nombre_asignatura,
+                        unidades_credito: subjectFromFile.unidades_credito,
+                        carreras: mergedCarreras
+                    };
+
+                    await sendRequest(`${API_BASE_URL}/${subjectFromFile.codigo_asignatura}`, 'PUT', payload, 'Actualizado');
+
                 } else {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || `Error HTTP ${response.status}`);
+                    // --- LÓGICA DE CREACIÓN (SIN CAMBIOS) ---
+                    logMessage(`Creando ${subjectFromFile.codigo_asignatura}...`, 'text-gray-400');
+                    await sendRequest(API_BASE_URL, 'POST', subjectFromFile, 'Creado');
                 }
-            } catch (error) {
-                logMessage(` -> Error con ${subject.codigo_asignatura}: ${error.message}`, 'text-red-400');
             }
-        }
 
-        logMessage('Proceso completado.', 'text-yellow-400');
-        processBtn.disabled = false;
-        // Opcional: resetear la UI después de procesar
-        // setTimeout(resetUI, 5000);
+        } catch (error) {
+            logMessage(`Error Crítico: ${error.message}`, 'text-red-400');
+        } finally {
+            logMessage('Proceso completado.', 'text-yellow-400');
+            processBtn.disabled = false;
+        }
     });
+
+    const sendRequest = async (url, method, payload, successVerb) => {
+        try {
+            const response = await fetch(url, {
+                method: method,
+                mode: 'cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                logMessage(` -> Éxito: ${payload.codigo_asignatura} ${successVerb}.`, 'text-green-400');
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `Error HTTP ${response.status}`);
+            }
+        } catch (error) {
+             logMessage(` -> Error con ${payload.codigo_asignatura}: ${error.message}`, 'text-red-400');
+        }
+    };
 
     const logMessage = (message, colorClass) => {
         const p = document.createElement('p');
         p.className = colorClass;
         p.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
         logOutput.appendChild(p);
-        // Hacer scroll automático al último mensaje
         logOutput.scrollTop = logOutput.scrollHeight;
     };
 
 });
 </script>
+
+</body>
+</html>
